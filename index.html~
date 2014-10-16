@@ -27,13 +27,10 @@
 			var light = new THREE.AmbientLight( 0x404040 );
 			scene.add( light );
 			camera.position.z = 5;
-			function move (var obj) {
-				obj.translateX(.1);
-				obj.translateY(.1);
-				obj.translateZ(.1);
-			}
 			var render = function () {
-				move(sphere);
+				sphere.translateX(.1);
+				sphere.translateY(.1);
+				sphere.translateZ(.1);
 				requestAnimationFrame(render);
 				renderer.render(scene, camera);
 			};
