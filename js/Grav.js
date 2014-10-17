@@ -3,9 +3,11 @@ var Num = 50;
 //var width = canvas.width;
 //var height = canvas.height;
 var scene = new THREE.Scene();
+var maxSize = 10;
 var gravConstant = 1;
 var PI = 3.141592;
 var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+var startFrame = 0;
 
 function getRandomColor() {
     var letters = '0123456789ABCDEF'.split('');
@@ -26,29 +28,32 @@ function getRandomColor() {
 
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
-
-	for(var i = 0; i < Num; i++){
-		var obj = new Object();
-		obj.x = 0;
-		obj.y = 0;
-		obj.z = 0;
-		obj.radius = Math.random()*10;
-		obj.xSpeed = Math.random()*40-20;
-		obj.ySpeed = Math.random()*40-20;
-		obj.zSpeed = Math.random()*40-20;
-		var geometry = new THREE.SphereGeometry(obj.radius);
-		var material = new THREE.MeshBasicMaterial( { color: getRandomColor() } );
-		var sphere = new THREE.Mesh( geometry, material );
-		obj.material = sphere;
-		allParticles.push(obj);
+	function init(){
+		for(var i = 0; i < Num; i++){
+			var obj = new Object();
+			obj.x = 0;
+			obj.y = 0;
+			obj.z = 0;
+			obj.radius = Math.random()*maxSize;
+			obj.xSpeed = Math.random()*40-20;
+			obj.ySpeed = Math.random()*40-20;
+			obj.zSpeed = Math.random()*40-20;
+			var geometry = new THREE.SphereGeometry(obj.radius);
+			var material = new THREE.MeshBasicMaterial( { color: getRandomColor() } );
+			var sphere = new THREE.Mesh( geometry, material );
+			obj.material = sphere;
+			allParticles.push(obj);
+		}
+		camera.position.x = 0;
+		camera.position.y = 0;
+		camera.position.z = 600;
+		for(var i = 0; i < startFrame; i++){
+			move();
+		}
+		for(var i = 0; i < Num; i++){
+			scene.add( allParticles[i].material);
+		}
 	}
-	for(var i = 0; i < Num; i++){
-		scene.add( allParticles[i].material);
-	}
-
-	camera.position.x = 0;
-	camera.position.y = 0;
-	camera.position.z = 600;
 
 var move = function () {
 	for(var x = 0; x < Num; x++){
@@ -88,6 +93,19 @@ var move = function () {
 	camera.position.y = ySum/Num;
 	camera.position.z = zSum/Num + 300;
 };
+
+init();
+
+function reInit(){
+Num = document.getElementById('numparticles').value;
+gravConstant = document.getElementById('gravstr').value/100;
+maxSize = document.getElementById('maxSize').value;
+startFrame = document.getElementById('start').value*100;
+allParticles = [];
+scene = new THREE.Scene();
+init();
+}
+
 
 var render = function () {
 	requestAnimationFrame(render);
