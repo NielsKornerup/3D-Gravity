@@ -1,5 +1,5 @@
 var allParticles=[];
-var Num = 2;
+var Num = 20;
 //var width = canvas.width;
 //var height = canvas.height;
 var scene = new THREE.Scene();
