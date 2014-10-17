@@ -35,6 +35,7 @@ function getRandomColor() {
 			obj.y = 0;
 			obj.z = 0;
 			obj.radius = Math.random()*maxSize;
+			obj.mass = Math.pow(obj.radius,3);
 			obj.xSpeed = Math.random()*40-20;
 			obj.ySpeed = Math.random()*40-20;
 			obj.zSpeed = Math.random()*40-20;
@@ -63,12 +64,12 @@ var move = function () {
 			var difZ = (allParticles[x].z-allParticles[y].z);
 			var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)+Math.pow(difZ,2)));
 			if(dist>5){
-				allParticles[x].xSpeed-=(difX*allParticles[y].radius*gravConstant)/Math.pow(dist,2);
-				allParticles[x].ySpeed-=(difY*allParticles[y].radius*gravConstant)/Math.pow(dist,2);
-				allParticles[y].xSpeed+=(difX*allParticles[x].radius*gravConstant)/Math.pow(dist,2);
-				allParticles[y].ySpeed+=(difY*allParticles[x].radius*gravConstant)/Math.pow(dist,2);
-				allParticles[x].zSpeed-=(difZ*allParticles[y].radius*gravConstant)/Math.pow(dist,2);
-				allParticles[y].zSpeed+=(difZ*allParticles[x].radius*gravConstant)/Math.pow(dist,2);
+				allParticles[x].xSpeed-=(difX*allParticles[y].mass*gravConstant)/Math.pow(dist,2);
+				allParticles[x].ySpeed-=(difY*allParticles[y].mass*gravConstant)/Math.pow(dist,2);
+				allParticles[y].xSpeed+=(difX*allParticles[x].mass*gravConstant)/Math.pow(dist,2);
+				allParticles[y].ySpeed+=(difY*allParticles[x].mass*gravConstant)/Math.pow(dist,2);
+				allParticles[x].zSpeed-=(difZ*allParticles[y].mass*gravConstant)/Math.pow(dist,2);
+				allParticles[y].zSpeed+=(difZ*allParticles[x].mass*gravConstant)/Math.pow(dist,2);
 				
 			}
 		}
