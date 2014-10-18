@@ -75,7 +75,7 @@ var move = function () {
 			var difY = (allParticles[x].y-allParticles[y].y);
 			var difZ = (allParticles[x].z-allParticles[y].z);
 			var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)+Math.pow(difZ,2)));
-			if(dist>5){
+			if(dist>allParticles[x].radius + allParticles[y].radius){
 				allParticles[x].xSpeed-=(difX*allParticles[y].mass*gravConstant)/Math.pow(dist,2);
 				allParticles[x].ySpeed-=(difY*allParticles[y].mass*gravConstant)/Math.pow(dist,2);
 				allParticles[y].xSpeed+=(difX*allParticles[x].mass*gravConstant)/Math.pow(dist,2);
