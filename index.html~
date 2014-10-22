@@ -15,12 +15,14 @@
 	<body>
 		<p1>Number of particles:
 		<input type="number" class="textbox-control form-control" id="numparticles">
-		Max size:
-		<input type="number" class="textbox-control form-control" id="gravstr">
-		Strength of gravity:</p1>
+		Strength of gravity:
+		<input type="number" class="textbox-control form-control" id="gravstr">		
+		Max size:</p1>
 		<input type="number" class="textbox-control form-control" id="maxSize">
 		<button type="button" class="btn btn-default" onclick="reInit()" id="controls-submit">Reload</button>
 		<script src="js/three.min.js"></script>
+		<script src='js/THREEx.KeyboardState.js'></script>
 		<script src="js/Grav.js"></script>
+
 	</body> 
 </html
