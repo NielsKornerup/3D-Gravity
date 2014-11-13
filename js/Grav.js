@@ -11,6 +11,7 @@ var showArrow = true;
 var keyboard = new THREEx.KeyboardState();
 var time = 0;
 var largestSize = 0;
+var collisions=false;
 
 var arrowHelper;
 
@@ -44,7 +45,7 @@ function init(){
 		obj.x = 0;
 		obj.y = 0;
 		obj.z = 0;
-		obj.radius = Math.random()*maxSize;
+		obj.radius =Math.ceil(Math.random()*maxSize);
 		obj.mass = Math.pow(obj.radius,3);
 		obj.xSpeed = Math.random()*40-20;
 		obj.ySpeed = Math.random()*40-20;
@@ -133,7 +134,7 @@ var move = function () {
 				particleB.newYSpeed+=(difY*particleA.mass*gravConstant)/Math.pow(dist,3);
 				particleB.newZSpeed+=(difZ*particleA.mass*gravConstant)/Math.pow(dist,3);
 			}
-			else if (time > 50){
+			else if (collisions){
 				console.log("Particle #" + x + " (at (" + particleA.x + "," + particleA.y + "," + particleA.z + ")) and particle #" + y + " (at (" + particleB.x + "," + particleB.y + "," + particleB.z + ")) collide. Their radii are " + particleA.radius + " and " + particleB.radius + ". Their distance is " + dist + ".");
 				var aSpeed = Math.sqrt(Math.pow(particleA.xSpeed,2)+Math.pow(particleA.ySpeed,2)+Math.pow(particleA.zSpeed,2));
 				var bSpeed = Math.sqrt(Math.pow(particleB.xSpeed,2)+Math.pow(particleB.ySpeed,2)+Math.pow(particleB.zSpeed,2));
@@ -173,7 +174,6 @@ var move = function () {
 				particleB.newYSpeed=(((particleB.ySpeed*(particleB.mass-particleA.mass))+(2*particleA.mass*particleA.ySpeed))/(particleB.mass+particleA.mass));
 
 				particleB.newZSpeed=(((particleB.zSpeed*(particleB.mass-particleA.mass))+(2*particleA.mass*particleA.zSpeed))/(particleB.mass+particleA.mass));
-
 			}
 		}
 	}
@@ -237,6 +237,8 @@ time=0;
 Num = document.getElementById('numparticles').value;
 gravConstant = document.getElementById('gravstr').value;
 maxSize = document.getElementById('maxSize').value;
+collisions = $("#Collisions").is(":checked");
+
 allParticles = [];
 scene = new THREE.Scene();
 init();
@@ -246,6 +248,7 @@ init();
 var render = function () {
 	requestAnimationFrame(render);
 	renderer.render(scene, camera);
+	move();
 };
-setInterval(move, 100);
+//setInterval(move, 100);
 render();
