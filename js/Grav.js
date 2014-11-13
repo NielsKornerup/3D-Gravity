@@ -87,7 +87,7 @@ var move = function () {
 	
 
 	if( keyboard.pressed("h")){
-		alert("This is a three dimensional particles simulator that is run using newton's definition for the force of gravity and three.js. If you want to mess with different settings, enter numbers into the boxes and press reload. The vector at the center of the screen shows the direction that the camera is currently moving. You can move the camera with wasd, and zoom in and out with j and k, respectively. Use l to toggle the camera vector.");
+		alert("This is a three dimensional particles simulator that is run using newton's definition for the force of gravity and three.js. If you want to mess with different settings, enter numbers into the boxes and press reload. The vector at the center of the screen shows the direction that the camera is currently moving. You can move the camera with wasd, and zoom in and out with j and k, respectively. Use l to toggle the camera vector. The elastic collisions are a little bit buggy, and I plan to fix them soon.");
 	}
 	if( keyboard.pressed("w")){
 		deltaY+=10;
