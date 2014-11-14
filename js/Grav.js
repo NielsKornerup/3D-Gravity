@@ -235,7 +235,7 @@ init();
 function reInit(){
 time=0;
 Num = document.getElementById('numparticles').value;
-gravConstant = document.getElementById('gravstr').value;
+gravConstant = document.getElementById('gravstr').value/100;
 maxSize = document.getElementById('maxSize').value;
 collisions = $("#Collisions").is(":checked");
 
