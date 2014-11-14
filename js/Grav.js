@@ -134,7 +134,7 @@ var move = function () {
 				particleB.newYSpeed+=(difY*particleA.mass*gravConstant)/Math.pow(dist,3);
 				particleB.newZSpeed+=(difZ*particleA.mass*gravConstant)/Math.pow(dist,3);
 			}
-			else if (collisions){
+			else if (collisions&&dist!=0){
 				//console.log("Particle #" + x + " (at (" + particleA.x + "," + particleA.y + "," + particleA.z + ")) and particle #" + y + " (at (" + particleB.x + "," + particleB.y + "," + particleB.z + ")) collide. Their radii are " + particleA.radius + " and " + particleB.radius + ". Their distance is " + dist + ".");
 				var aSpeed = Math.sqrt(Math.pow(particleA.xSpeed,2)+Math.pow(particleA.ySpeed,2)+Math.pow(particleA.zSpeed,2));
 				var bSpeed = Math.sqrt(Math.pow(particleB.xSpeed,2)+Math.pow(particleB.ySpeed,2)+Math.pow(particleB.zSpeed,2));
