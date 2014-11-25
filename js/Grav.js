@@ -31,28 +31,32 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 function getRandomColor() {
-    var letters = '0123456789ABCDEF'.split('');
-    var color = '#';
-    for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
+	var letters = '0123456789ABCDEF'.split('');
+	var color = '#';
+	for (var i = 0; i < 6; i++ ) {
+		color += letters[Math.floor(Math.random() * 16)];
+	}
+	return color;
 }
 
 function init(){
 	for(var i = 0; i < Num; i++){
 		var obj = new Object();
-		obj.x = 0;
-		obj.y = 0;
-		obj.z = 0;
+		obj.position = new Object();
+		obj.velocity = new Object();
+		obj.newVelocity = new Object(); 
+		obj.newPosition = new Object();
+		obj.position.x = 0;
+		obj.position.y = 0;
+		obj.position.z = 0;
 		obj.radius =Math.ceil(Math.random()*maxSize);
 		obj.mass = Math.pow(obj.radius,3);
-		obj.xSpeed = Math.random()*40-20;
-		obj.ySpeed = Math.random()*40-20;
-		obj.zSpeed = Math.random()*40-20;
-		obj.newXSpeed = obj.xSpeed;
-		obj.newYSpeed = obj.ySpeed;
-		obj.newZSpeed = obj.zSpeed;
+		obj.velocity.x = Math.random()*40-20;
+		obj.velocity.y = Math.random()*40-20;
+		obj.velocity.z = Math.random()*40-20;
+		obj.newVelocity.x = obj.velocity.x;
+		obj.newVelocity.y = obj.velocity.y;
+		obj.newVelocity.z = obj.velocity.z;
 		if(obj.radius > largestSize){
 			largestSize = obj.radius;
 		}
@@ -111,36 +115,36 @@ var move = function () {
 		showArrow = !showArrow;
 	}
 	for(var i = 0; i < Num; i++){
-		allParticles[i].newXSpeed = allParticles[i].xSpeed;
-		allParticles[i].newYSpeed = allParticles[i].ySpeed;
-		allParticles[i].newZSpeed = allParticles[i].zSpeed;
-		allParticles[i].newX = allParticles[i].x;
-		allParticles[i].newY = allParticles[i].y;
-		allParticles[i].newZ = allParticles[i].z;
+		allParticles[i].newVelocity.x = allParticles[i].velocity.x;
+		allParticles[i].newVelocity.y = allParticles[i].velocity.y;
+		allParticles[i].newVelocity.z = allParticles[i].velocity.z;
+		allParticles[i].newPosition.x = allParticles[i].position.x;
+		allParticles[i].newPosition.y = allParticles[i].position.y;
+		allParticles[i].newPosition.z = allParticles[i].position.z;
 	}
 	for(var x = 0; x < Num; x++){
 		for(var y = x+1; y < Num; y++){
 			var particleA = allParticles[x];
 			var particleB = allParticles[y];
-			var difX = (particleA.x-particleB.x);
-			var difY = (particleA.y-particleB.y);
-			var difZ = (particleA.z-particleB.z);
+			var difX = (particleA.position.x-particleB.position.x);
+			var difY = (particleA.position.y-particleB.position.y);
+			var difZ = (particleA.position.z-particleB.position.z);
 			var dist =Math.sqrt((Math.pow(difX,2)+Math.pow(difY,2)+Math.pow(difZ,2)));
 			if(dist>=particleA.radius + particleB.radius){
-				particleA.newXSpeed-=(difX*particleB.mass*gravConstant)/Math.pow(dist,3);
-				particleA.newYSpeed-=(difY*particleB.mass*gravConstant)/Math.pow(dist,3);
-				particleA.newZSpeed-=(difZ*particleB.mass*gravConstant)/Math.pow(dist,3);
-				particleB.newXSpeed+=(difX*particleA.mass*gravConstant)/Math.pow(dist,3);
-				particleB.newYSpeed+=(difY*particleA.mass*gravConstant)/Math.pow(dist,3);
-				particleB.newZSpeed+=(difZ*particleA.mass*gravConstant)/Math.pow(dist,3);
+				particleA.newVelocity.x-=(difX*particleB.mass*gravConstant)/Math.pow(dist,3);
+				particleA.newVelocity.y-=(difY*particleB.mass*gravConstant)/Math.pow(dist,3);
+				particleA.newVelocity.z-=(difZ*particleB.mass*gravConstant)/Math.pow(dist,3);
+				particleB.newVelocity.x+=(difX*particleA.mass*gravConstant)/Math.pow(dist,3);
+				particleB.newVelocity.y+=(difY*particleA.mass*gravConstant)/Math.pow(dist,3);
+				particleB.newVelocity.z+=(difZ*particleA.mass*gravConstant)/Math.pow(dist,3);
 			}
 			else if (collisions&&dist!=0){
-				//console.log("Particle #" + x + " (at (" + particleA.x + "," + particleA.y + "," + particleA.z + ")) and particle #" + y + " (at (" + particleB.x + "," + particleB.y + "," + particleB.z + ")) collide. Their radii are " + particleA.radius + " and " + particleB.radius + ". Their distance is " + dist + ".");
-				var aSpeed = Math.sqrt(Math.pow(particleA.xSpeed,2)+Math.pow(particleA.ySpeed,2)+Math.pow(particleA.zSpeed,2));
-				var bSpeed = Math.sqrt(Math.pow(particleB.xSpeed,2)+Math.pow(particleB.ySpeed,2)+Math.pow(particleB.zSpeed,2));
-				var difX2 = (particleA.x-particleB.x);
-				var difY2 = (particleA.y-particleB.y);
-				var difZ2 = (particleA.z-particleB.z);
+				//console.log("Particle #" + x + " (at (" + particleA.position.x + "," + particleA.position.y + "," + particleA.position.z + ")) and particle #" + y + " (at (" + particleB.position.x + "," + particleB.position.y + "," + particleB.position.z + ")) collide. Their radii are " + particleA.radius + " and " + particleB.radius + ". Their distance is " + dist + ".");
+				var aSpeed = Math.sqrt(Math.pow(particleA.velocity.x,2)+Math.pow(particleA.velocity.y,2)+Math.pow(particleA.velocity.z,2));
+				var bSpeed = Math.sqrt(Math.pow(particleB.velocity.x,2)+Math.pow(particleB.velocity.y,2)+Math.pow(particleB.velocity.z,2));
+				var difX2 = (particleA.position.x-particleB.position.x);
+				var difY2 = (particleA.position.y-particleB.position.y);
+				var difZ2 = (particleA.position.z-particleB.position.z);
 				var dist2 =Math.sqrt((Math.pow(difX2,2)+Math.pow(difY2,2)+Math.pow(difZ2,2)));
 				var tunnelingObject=0;
 				var nonTunnelingObject=0;
@@ -153,27 +157,27 @@ var move = function () {
 					nonTunnelingObject = y;
 				}
 				while(dist2<(allParticles[tunnelingObject].radius+allParticles[nonTunnelingObject].radius)){
-					difX2 = (particleA.newX-particleB.newX);
-					difY2 = (particleA.newY-particleB.newY);
-					difZ2 = (particleA.z-particleB.z);
+					difX2 = (particleA.newPosition.x-particleB.newPosition.x);
+					difY2 = (particleA.newPosition.y-particleB.newPosition.y);
+					difZ2 = (particleA.newPosition.z-particleB.newPosition.z);
 					dist2 = Math.sqrt((Math.pow(difX2,2)+Math.pow(difY2,2)+Math.pow(difZ2,2)));
-					allParticles[tunnelingObject].newX=allParticles[tunnelingObject].newX-allParticles[tunnelingObject].xSpeed/10;
-					allParticles[tunnelingObject].newY=allParticles[tunnelingObject].newY-allParticles[tunnelingObject].ySpeed/10;
-					allParticles[tunnelingObject].newZ=allParticles[tunnelingObject].newZ-allParticles[tunnelingObject].zSpeed/10;
+					allParticles[tunnelingObject].newPosition.x=allParticles[tunnelingObject].newPosition.x-allParticles[tunnelingObject].velocity.x/10;
+					allParticles[tunnelingObject].newPosition.y=allParticles[tunnelingObject].newPosition.y-allParticles[tunnelingObject].velocity.y/10;
+					allParticles[tunnelingObject].newPosition.z=allParticles[tunnelingObject].newPosition.z-allParticles[tunnelingObject].velocity.z/10;
 				}
 
-				particleA.newXSpeed=(((particleA.xSpeed*(particleA.mass-particleB.mass))+(2*particleB.mass*particleB.xSpeed))/(particleA.mass+particleB.mass));
+				particleA.newVelocity.x=(((particleA.velocity.x*(particleA.mass-particleB.mass))+(2*particleB.mass*particleB.velocity.x))/(particleA.mass+particleB.mass));
 
-				particleA.newYSpeed=(((particleA.ySpeed*(particleA.mass-particleB.mass))+(2*particleB.mass*particleB.ySpeed))/(particleA.mass+particleB.mass));
+				particleA.newVelocity.y=(((particleA.velocity.y*(particleA.mass-particleB.mass))+(2*particleB.mass*particleB.velocity.y))/(particleA.mass+particleB.mass));
 
-				particleA.newZSpeed=(((particleA.zSpeed*(particleA.mass-particleB.mass))+(2*particleB.mass*particleB.zSpeed))/(particleA.mass+particleB.mass));
+				particleA.newVelocity.z=(((particleA.velocity.z*(particleA.mass-particleB.mass))+(2*particleB.mass*particleB.velocity.z))/(particleA.mass+particleB.mass));
 
 
-				particleB.newXSpeed=(((particleB.xSpeed*(particleB.mass-particleA.mass))+(2*particleA.mass*particleA.xSpeed))/(particleB.mass+particleA.mass));
+				particleB.newVelocity.x=(((particleB.velocity.x*(particleB.mass-particleA.mass))+(2*particleA.mass*particleA.velocity.x))/(particleB.mass+particleA.mass));
 
-				particleB.newYSpeed=(((particleB.ySpeed*(particleB.mass-particleA.mass))+(2*particleA.mass*particleA.ySpeed))/(particleB.mass+particleA.mass));
+				particleB.newVelocity.y=(((particleB.velocity.y*(particleB.mass-particleA.mass))+(2*particleA.mass*particleA.velocity.y))/(particleB.mass+particleA.mass));
 
-				particleB.newZSpeed=(((particleB.zSpeed*(particleB.mass-particleA.mass))+(2*particleA.mass*particleA.zSpeed))/(particleB.mass+particleA.mass));
+				particleB.newVelocity.z=(((particleB.velocity.z*(particleB.mass-particleA.mass))+(2*particleA.mass*particleA.velocity.z))/(particleB.mass+particleA.mass));
 			}
 		}
 	}
@@ -187,26 +191,26 @@ var move = function () {
 	var centerOfZMass = 0;
 
 	for(var i = 0; i < Num; i++){
-		allParticles[i].xSpeed = allParticles[i].newXSpeed;
-		allParticles[i].ySpeed = allParticles[i].newYSpeed;
-		allParticles[i].zSpeed = allParticles[i].newZSpeed;
-		allParticles[i].x = allParticles[i].newX;
-		allParticles[i].y = allParticles[i].newY;
-		allParticles[i].z = allParticles[i].newZ;
+		allParticles[i].velocity.x = allParticles[i].newVelocity.x;
+		allParticles[i].velocity.y = allParticles[i].newVelocity.y;
+		allParticles[i].velocity.z = allParticles[i].newVelocity.z;
+		allParticles[i].position.x = allParticles[i].newPosition.x;
+		allParticles[i].position.y = allParticles[i].newPosition.y;
+		allParticles[i].position.z = allParticles[i].newPosition.z;
 
-		allParticles[i].material.translateX(allParticles[i].xSpeed);
-		allParticles[i].material.translateY(allParticles[i].ySpeed);
-		allParticles[i].material.translateZ(allParticles[i].zSpeed);
-		allParticles[i].x+=allParticles[i].xSpeed;
-		allParticles[i].y+=allParticles[i].ySpeed;
-		allParticles[i].z+=allParticles[i].zSpeed;
+		allParticles[i].material.translateX(allParticles[i].velocity.x);
+		allParticles[i].material.translateY(allParticles[i].velocity.y);
+		allParticles[i].material.translateZ(allParticles[i].velocity.z);
+		allParticles[i].position.x+=allParticles[i].velocity.x;
+		allParticles[i].position.y+=allParticles[i].velocity.y;
+		allParticles[i].position.z+=allParticles[i].velocity.z;
 
-		xSum += allParticles[i].x;
-		ySum += allParticles[i].y;
-		zSum += allParticles[i].z;
-		centerOfXMass += allParticles[i].x*allParticles[i].mass;
-		centerOfYMass += allParticles[i].y*allParticles[i].mass;
-		centerOfZMass += allParticles[i].z*allParticles[i].mass;
+		xSum += allParticles[i].position.x;
+		ySum += allParticles[i].position.y;
+		zSum += allParticles[i].position.z;
+		centerOfXMass += allParticles[i].position.x*allParticles[i].mass;
+		centerOfYMass += allParticles[i].position.y*allParticles[i].mass;
+		centerOfZMass += allParticles[i].position.z*allParticles[i].mass;
 		totalMass += allParticles[i].mass;
 	}
 
@@ -233,15 +237,15 @@ var move = function () {
 init();
 
 function reInit(){
-time=0;
-Num = document.getElementById('numparticles').value;
-gravConstant = document.getElementById('gravstr').value/100;
-maxSize = document.getElementById('maxSize').value;
-collisions = $("#Collisions").is(":checked");
+	time=0;
+	Num = document.getElementById('numparticles').value;
+	gravConstant = document.getElementById('gravstr').value/100;
+	maxSize = document.getElementById('maxSize').value;
+	collisions = $("#Collisions").is(":checked");
 
-allParticles = [];
-scene = new THREE.Scene();
-init();
+	allParticles = [];
+	scene = new THREE.Scene();
+	init();
 }
 
 
@@ -250,5 +254,4 @@ var render = function () {
 	renderer.render(scene, camera);
 	move();
 };
-//setInterval(move, 100);
 render();
