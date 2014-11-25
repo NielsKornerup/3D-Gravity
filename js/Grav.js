@@ -40,6 +40,9 @@ function getRandomColor() {
 }
 
 function init(){
+	document.getElementById('numparticles').value=Num;
+	document.getElementById('gravstr').value=100*gravConstant;
+	document.getElementById('maxSize').value=maxSize;
 	for(var i = 0; i < Num; i++){
 		var obj = new Object();
 		obj.position = new Object();
