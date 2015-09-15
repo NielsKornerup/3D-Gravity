@@ -11,8 +11,7 @@ var showArrow = true;
 var keyboard = new THREEx.KeyboardState();
 var time = 0;
 var largestSize = 0;
-var collisions=false;
-
+var cooldown = 0;
 var arrowHelper;
 
 var deltaX;
@@ -94,7 +93,7 @@ var move = function () {
 	
 
 	if( keyboard.pressed("h")){
-		alert("This is a three dimensional particles simulator that is run using newton's definition for the force of gravity and three.js. If you want to mess with different settings, enter numbers into the boxes and press reload. The vector at the center of the screen shows the direction that the camera is currently moving. You can move the camera with wasd, and zoom in and out with j and k, respectively. Use l to toggle the camera vector. The elastic collisions are a little bit buggy, and I plan to fix them soon.");
+		alert("This is a three dimensional particles simulator that is run using Newton's definition for the force of gravity and three.js. If you want to mess with different settings, enter numbers into the boxes and press reload. The vector at the center of the screen shows the direction that the camera is currently moving. You can move the camera with w, a, s, and d, and zoom in and out with j and k, respectively. Use l to toggle the camera vector.");
 	}
 	if( keyboard.pressed("w")){
 		deltaY+=10;
@@ -114,8 +113,12 @@ var move = function () {
 	if( keyboard.pressed("k")){
 		deltaZ+=10;
 	}
-	if( keyboard.pressed("l")){
+	if( keyboard.pressed("l") && cooldown ==0 ){
 		showArrow = !showArrow;
+		cooldown = 5;
+	}
+	if(cooldown >0){
+		cooldown--;
 	}
 	for(var i = 0; i < Num; i++){
 		allParticles[i].newVelocity.x = allParticles[i].velocity.x;
@@ -140,47 +143,6 @@ var move = function () {
 				particleB.newVelocity.x+=(difX*particleA.mass*gravConstant)/Math.pow(dist,3);
 				particleB.newVelocity.y+=(difY*particleA.mass*gravConstant)/Math.pow(dist,3);
 				particleB.newVelocity.z+=(difZ*particleA.mass*gravConstant)/Math.pow(dist,3);
-			}
-			else if (collisions&&dist!=0){
-				//console.log("Particle #" + x + " (at (" + particleA.position.x + "," + particleA.position.y + "," + particleA.position.z + ")) and particle #" + y + " (at (" + particleB.position.x + "," + particleB.position.y + "," + particleB.position.z + ")) collide. Their radii are " + particleA.radius + " and " + particleB.radius + ". Their distance is " + dist + ".");
-				var aSpeed = Math.sqrt(Math.pow(particleA.velocity.x,2)+Math.pow(particleA.velocity.y,2)+Math.pow(particleA.velocity.z,2));
-				var bSpeed = Math.sqrt(Math.pow(particleB.velocity.x,2)+Math.pow(particleB.velocity.y,2)+Math.pow(particleB.velocity.z,2));
-				var difX2 = (particleA.position.x-particleB.position.x);
-				var difY2 = (particleA.position.y-particleB.position.y);
-				var difZ2 = (particleA.position.z-particleB.position.z);
-				var dist2 =Math.sqrt((Math.pow(difX2,2)+Math.pow(difY2,2)+Math.pow(difZ2,2)));
-				var tunnelingObject=0;
-				var nonTunnelingObject=0;
-				if(aSpeed>bSpeed){
-					tunnelingObject = y;
-					nonTunnelingObject = x;
-				}
-				else{
-					tunnelingObject = x;
-					nonTunnelingObject = y;
-				}
-				while(dist2<(allParticles[tunnelingObject].radius+allParticles[nonTunnelingObject].radius)){
-					difX2 = (particleA.newPosition.x-particleB.newPosition.x);
-					difY2 = (particleA.newPosition.y-particleB.newPosition.y);
-					difZ2 = (particleA.newPosition.z-particleB.newPosition.z);
-					dist2 = Math.sqrt((Math.pow(difX2,2)+Math.pow(difY2,2)+Math.pow(difZ2,2)));
-					allParticles[tunnelingObject].newPosition.x=allParticles[tunnelingObject].newPosition.x-allParticles[tunnelingObject].velocity.x/10;
-					allParticles[tunnelingObject].newPosition.y=allParticles[tunnelingObject].newPosition.y-allParticles[tunnelingObject].velocity.y/10;
-					allParticles[tunnelingObject].newPosition.z=allParticles[tunnelingObject].newPosition.z-allParticles[tunnelingObject].velocity.z/10;
-				}
-
-				particleA.newVelocity.x=(((particleA.velocity.x*(particleA.mass-particleB.mass))+(2*particleB.mass*particleB.velocity.x))/(particleA.mass+particleB.mass));
-
-				particleA.newVelocity.y=(((particleA.velocity.y*(particleA.mass-particleB.mass))+(2*particleB.mass*particleB.velocity.y))/(particleA.mass+particleB.mass));
-
-				particleA.newVelocity.z=(((particleA.velocity.z*(particleA.mass-particleB.mass))+(2*particleB.mass*particleB.velocity.z))/(particleA.mass+particleB.mass));
-
-
-				particleB.newVelocity.x=(((particleB.velocity.x*(particleB.mass-particleA.mass))+(2*particleA.mass*particleA.velocity.x))/(particleB.mass+particleA.mass));
-
-				particleB.newVelocity.y=(((particleB.velocity.y*(particleB.mass-particleA.mass))+(2*particleA.mass*particleA.velocity.y))/(particleB.mass+particleA.mass));
-
-				particleB.newVelocity.z=(((particleB.velocity.z*(particleB.mass-particleA.mass))+(2*particleA.mass*particleA.velocity.z))/(particleB.mass+particleA.mass));
 			}
 		}
 	}
@@ -244,7 +206,6 @@ function reInit(){
 	Num = document.getElementById('numparticles').value;
 	gravConstant = document.getElementById('gravstr').value/100;
 	maxSize = document.getElementById('maxSize').value;
-	collisions = $("#Collisions").is(":checked");
 
 	allParticles = [];
 	scene = new THREE.Scene();
